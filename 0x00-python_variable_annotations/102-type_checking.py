@@ -6,6 +6,7 @@ from typing import List, Tuple, Any
 
 
 def zoom_array(lst: Tuple, factor: int = 2) -> List:
+    """Returns an array of "lst" items, each one is repeated "factor" times"""
     zoomed_in: List = [
         item for item in lst
         for i in range(factor)
