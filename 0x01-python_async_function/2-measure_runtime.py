@@ -9,8 +9,9 @@ import time
 wait_n = __import__('1-concurrent_coroutines').wait_n
 
 
-async def measure_time(n: int, max_delay: int) -> float:
+def measure_time(n: int, max_delay: int) -> float:
     """Returns total execution time of wait_n divided by n"""
     t1 = time.time()
-    await wait_n(n, max_delay)
-    return (time.time() - t1) / n
+    asyncio.run(wait_n(n, max_delay))
+    t2 = time.time()
+    return (t2 - t1) / n
