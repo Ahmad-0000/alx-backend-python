@@ -102,5 +102,6 @@ class TestGithubOrgClient(unittest.TestCase):
             m_method.use_count()
             m_fun.use_count()
 
+
 if __name__ == "__main__":
     unittest.main()
