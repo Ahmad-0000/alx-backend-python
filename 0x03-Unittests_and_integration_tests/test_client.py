@@ -21,6 +21,7 @@ class TestGithubOrgClient(unittest.TestCase):
         m_function.once_with(f"https://api.github.com/orgs/{org}")
 
     def test_public_repos_url(self):
+        """Testing "_public_repos_url" method"""
         with unittest.mock.patch.object(
                 GithubOrgClient,
                 "org",
