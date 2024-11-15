@@ -32,13 +32,45 @@ class TestGithubOrgClient(unittest.TestCase):
                 return_value={"payload": True, "repos_url": [
                 "https://www.github.com/imaginary_org/imaginary_project_1",
                 "https://www.github.com/imaginary_org/imaginary_project_2",
-                ]}) as p_mock:
+                ]}):
             self.assertEqual(
                 GithubOrgClient("imaginary_org")._public_repos_url,
                 [
                     "https://www.github.com/imaginary_org/imaginary_project_1",
                     "https://www.github.com/imaginary_org/imaginary_project_2",
                 ]
+            )
+
+    @unittest.mock.patch("client.get_json")
+    def test_public_repos(self, m_function):
+        """Testing "public_repos" method"""
+        m_function.return_value = [
+                {
+                    "payload": True,
+                    "name": "Imaginary Project",
+                    "license": None,
+                    "repos_url": [
+                        "https://github.com/my_org/imaginary"
+                    ]
+                }
+        ]
+
+        with unittest.mock.patch.object(
+                GithubOrgClient,
+                "_public_repos_url",
+                unittest.mock.sentinel.DEFAULT,
+                None,
+                False,
+                None,
+                None,
+                unittest.mock.PropertyMock,
+                return_value={
+                        "name": ["Imaginary Project"],
+                        "https": "//github.com/org/imaginary"
+                }):
+            self.assertEqual(
+                    GithubOrgClient("Imaginary")._public_repos_url["name"],
+                    GithubOrgClient("Imaginary").public_repos(None)
             )
 
 
