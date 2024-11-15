@@ -3,8 +3,7 @@
 Contains tests for GithubOrgClient class
 """
 import unittest
-from unittest.mock import patch, PropertyMock
-import unittest.mock
+from unittest.mock import patch, PropertyMock, sentinel
 from parameterized import parameterized
 from client import GithubOrgClient
 
@@ -25,12 +24,12 @@ class TestGithubOrgClient(unittest.TestCase):
         with unittest.mock.patch.object(
                 GithubOrgClient,
                 "org",
-                unittest.mock.sentinel.DEFAULT,
+                sentinel.DEFAULT,
                 None,
                 False,
                 None,
                 None,
-                unittest.mock.PropertyMock,
+                PropertyMock,
                 return_value={"payload": True, "repos_url": [
                 "https://www.github.com/imaginary_org/imaginary_project_1",
                 "https://www.github.com/imaginary_org/imaginary_project_2",
@@ -44,9 +43,9 @@ class TestGithubOrgClient(unittest.TestCase):
             )
 
     @patch("client.get_json")
-    def test_public_repos(self, m_function):
+    def test_public_repos(self, m_fun):
         """Testing "public_repos" method"""
-        m_function.return_value = [
+        m_fun.return_value = [
                 {
                     "payload": True,
                     "name": "Imaginary Project",
@@ -60,7 +59,7 @@ class TestGithubOrgClient(unittest.TestCase):
         with patch.object(
                 GithubOrgClient,
                 "_public_repos_url",
-                unittest.mock.sentinel.DEFAULT,
+                sentinel.DEFAULT,
                 None,
                 False,
                 None,
@@ -69,11 +68,15 @@ class TestGithubOrgClient(unittest.TestCase):
                 return_value={
                         "name": ["Imaginary Project"],
                         "https": "//github.com/org/imaginary"
-                }):
+                }) as m_method:
             self.assertEqual(
-                    GithubOrgClient("Imaginary")._public_repos_url["name"],
-                    GithubOrgClient("Imaginary").public_repos(None)
+                    GithubOrgClient("Imaginary").public_repos(None),
+                    ["Imaginary Project"]
             )
+            m_method.use_count = m_method.call_count
+            m_fun.use_count = m_fun.call_count
+            self.assertEqual(m_fun.use_count, 1)
+            self.assertEqual(m_method.use_count, 1)
 
 
 if __name__ == "__main__":
