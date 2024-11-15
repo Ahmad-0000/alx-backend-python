@@ -82,9 +82,8 @@ class TestGithubOrgClient(unittest.TestCase):
                 }
         ]
 
-        with patch.object(
-                GithubOrgClient,
-                "_public_repos_url",
+        with patch(
+                "client.GithubOrgClient._public_repos_url",
                 sentinel.DEFAULT,
                 None,
                 False,
