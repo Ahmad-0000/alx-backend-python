@@ -3,7 +3,7 @@
 Contains tests for GithubOrgClient class
 """
 import unittest
-from unittest.mock import patch
+import unittest.mock
 from parameterized import parameterized
 from client import GithubOrgClient
 
@@ -11,7 +11,7 @@ from client import GithubOrgClient
 class TestGithubOrgClient(unittest.TestCase):
     """Testing GithubOrgClient class"""
     @parameterized.expand(["google", "abc"])
-    @patch("client.get_json")
+    @unittest.mock.patch("client.get_json")
     def test_org(self, org, m_function):
         """Testing "GithubOrgClient.org" method"""
         m_function.return_value = None
@@ -19,6 +19,27 @@ class TestGithubOrgClient(unittest.TestCase):
         self.assertIsNone(new_org.org)
         m_function.once_with = m_function.assert_called_once_with
         m_function.once_with(f"https://api.github.com/orgs/{org}")
+
+    def test_public_repos_url(self):
+        with unittest.mock.patch(
+                "__main__.GithubOrgClient.org",
+                unittest.mock.sentinel.DEFAULT,
+                None,
+                False,
+                None,
+                None,
+                unittest.mock.PropertyMock,
+                return_value={"payload": True, "repos_url": [
+                "https://www.github.com/imaginary_org/imaginary_project_1",
+                "https://www.github.com/imaginary_org/imaginary_project_2",
+                ]}) as p_mock:
+            self.assertEqual(
+                GithubOrgClient("imaginary_org")._public_repos_url,
+                [
+                    "https://www.github.com/imaginary_org/imaginary_project_1",
+                    "https://www.github.com/imaginary_org/imaginary_project_2",
+                ]
+            )
 
 
 if __name__ == "__main__":
