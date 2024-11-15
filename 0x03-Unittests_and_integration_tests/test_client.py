@@ -55,7 +55,29 @@ class TestGithubOrgClient(unittest.TestCase):
                         "key": "mit"
                     },
                     "repos_url": [
-                        "https://github.com/my_org/imaginary"
+                        "https://api.github.com/org/Imaginary"
+                    ]
+                },
+                {
+                    "payload": True,
+                    "name": "Imaginary Project 2",
+                    "license": {
+                        "name": "GNU License",
+                        "key": "gnu"
+                    },
+                    "repos_url": [
+                        "https://api.github.com/org/Imaginary"
+                    ]
+                },
+                {
+                    "payload": True,
+                    "name": "Imaginary Project 3",
+                    "license": {
+                        "name": "MIT License",
+                        "key": "mit"
+                    },
+                    "repos_url": [
+                        "https://api.github.com/org/Imaginary"
                     ]
                 }
         ]
@@ -69,13 +91,12 @@ class TestGithubOrgClient(unittest.TestCase):
                 None,
                 None,
                 PropertyMock,
-                return_value={
-                        "name": ["Imaginary Project"],
-                        "https": "//github.com/my_org/imaginary"
-                }) as m_method:
+                return_value=[
+                    "https://api.github.com/org/Imaginary"
+                ]) as m_method:
             self.assertEqual(
                     GithubOrgClient("Imaginary").public_repos("mit"),
-                    ["Imaginary Project"]
+                    ["Imaginary Project", "Imaginary Project 3"]
             )
             m_method.use_count = m_method.call_count
             m_fun.use_count = m_fun.call_count
