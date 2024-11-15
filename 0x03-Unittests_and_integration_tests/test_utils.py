@@ -3,8 +3,9 @@
 Contains "utils" module tests
 """
 import unittest
-from utils import access_nested_map
+from utils import access_nested_map, get_json
 from parameterized import parameterized
+from unittest.mock import Mock, patch
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -27,6 +28,19 @@ class TestAccessNestedMap(unittest.TestCase):
             access_nested_map(mapping, path)
 
 
-    
+class TestGetJson(unittest.TestCase):
+    """Testing "get_json" function"""
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}),
+        ("http://holberton.io", {"payload": False})
+    ])
+    @patch("utils.requests")
+    def test_get_json(self, url, payload, m_version):
+        m_version.get.return_value.json.return_value = payload
+        self.assertEqual(get_json(url), payload)
+        m_version.get.use_count = m_version.get.call_count
+        self.assertEqual(m_version.get.use_count, 1)
+
+        
 if __name__ == "__main__":
     unittest.main()
