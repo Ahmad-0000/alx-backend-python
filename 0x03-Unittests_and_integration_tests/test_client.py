@@ -102,6 +102,13 @@ class TestGithubOrgClient(unittest.TestCase):
             m_method.use_count()
             m_fun.use_count()
 
+    @parameterized.expand([
+        ({"license": {"key": "my_license"}}, "my_license", True),
+        ({"license": {"key": "other_license"}}, "my_license", False),
+    ])
+    def test_has_license(self, repository, key, result):
+        """Testing "has_license" method"""
+        self.assertEqual(GithubOrgClient.has_license(repository, key), result)
 
 if __name__ == "__main__":
     unittest.main()
