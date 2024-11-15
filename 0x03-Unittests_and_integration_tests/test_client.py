@@ -21,8 +21,9 @@ class TestGithubOrgClient(unittest.TestCase):
         m_function.once_with(f"https://api.github.com/orgs/{org}")
 
     def test_public_repos_url(self):
-        with unittest.mock.patch(
-                "__main__.GithubOrgClient.org",
+        with unittest.mock.patch.object(
+                GithubOrgClient,
+                "org",
                 unittest.mock.sentinel.DEFAULT,
                 None,
                 False,
