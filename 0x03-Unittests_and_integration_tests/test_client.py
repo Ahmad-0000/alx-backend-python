@@ -14,9 +14,9 @@ class TestGithubOrgClient(unittest.TestCase):
     @patch("client.get_json")
     def test_org(self, org, m_function):
         """Testing "GithubOrgClient.org" method"""
-        m_function.side_effect = None
+        m_function.return_value = {"payload": True}
         new_org = GithubOrgClient(org)
-        new_org.org()
+        self.assertEqual(new_org.org, {"payload": True})
         m_function.once_with = m_function.assert_called_once_with
         m_function.once_with(f"https://api.github.com/orgs/{org}")
 
