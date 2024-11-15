@@ -25,6 +25,7 @@ class TestAccessNestedMap(unittest.TestCase):
         ({"a": 1}, ["a", "b"])
     ])
     def test_access_nested_map_exception(self, mapping, path):
+        """Testing invalid input"""
         with self.assertRaises(KeyError):
             access_nested_map(mapping, path)
 
@@ -37,6 +38,7 @@ class TestGetJson(unittest.TestCase):
     ])
     @patch("utils.requests")
     def test_get_json(self, url, payload, m_version):
+        """Testing "get_json" method"""
         m_version.get.return_value.json.return_value = payload
         self.assertEqual(get_json(url), payload)
         m_version.get.use_count = m_version.get.call_count
