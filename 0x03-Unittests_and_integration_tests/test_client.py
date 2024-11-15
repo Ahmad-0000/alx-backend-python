@@ -97,11 +97,10 @@ class TestGithubOrgClient(unittest.TestCase):
                     GithubOrgClient("Imaginary").public_repos("mit"),
                     ["Imaginary Project", "Imaginary Project 3"]
             )
-            m_method.use_count = m_method.call_count
-            m_fun.use_count = m_fun.call_count
-            self.assertEqual(m_fun.use_count, 1)
-            self.assertEqual(m_method.use_count, 1)
-
+            m_method.use_count = m_method.assert_called_once
+            m_fun.use_count = m_fun.assert_called_once
+            m_method.use_count()
+            m_fun.use_count()
 
 if __name__ == "__main__":
     unittest.main()
