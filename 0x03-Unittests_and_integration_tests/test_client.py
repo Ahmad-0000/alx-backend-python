@@ -3,6 +3,7 @@
 Contains tests for GithubOrgClient class
 """
 import unittest
+from unittest.mock import patch, PropertyMock
 import unittest.mock
 from parameterized import parameterized
 from client import GithubOrgClient
@@ -42,7 +43,7 @@ class TestGithubOrgClient(unittest.TestCase):
                 ]
             )
 
-    @unittest.mock.patch("client.get_json")
+    @patch("client.get_json")
     def test_public_repos(self, m_function):
         """Testing "public_repos" method"""
         m_function.return_value = [
@@ -56,7 +57,7 @@ class TestGithubOrgClient(unittest.TestCase):
                 }
         ]
 
-        with unittest.mock.patch.object(
+        with patch.object(
                 GithubOrgClient,
                 "_public_repos_url",
                 unittest.mock.sentinel.DEFAULT,
@@ -64,7 +65,7 @@ class TestGithubOrgClient(unittest.TestCase):
                 False,
                 None,
                 None,
-                unittest.mock.PropertyMock,
+                PropertyMock,
                 return_value={
                         "name": ["Imaginary Project"],
                         "https": "//github.com/org/imaginary"
