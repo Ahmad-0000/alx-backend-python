@@ -50,7 +50,10 @@ class TestGithubOrgClient(unittest.TestCase):
                 {
                     "payload": True,
                     "name": "Imaginary Project",
-                    "license": None,
+                    "license": {
+                        "name": "MIT License",
+                        "key": "mit"
+                    },
                     "repos_url": [
                         "https://github.com/my_org/imaginary"
                     ]
@@ -68,10 +71,10 @@ class TestGithubOrgClient(unittest.TestCase):
                 PropertyMock,
                 return_value={
                         "name": ["Imaginary Project"],
-                        "https": "//github.com/org/imaginary"
+                        "https": "//github.com/my_org/imaginary"
                 }) as m_method:
             self.assertEqual(
-                    GithubOrgClient("Imaginary").public_repos(None),
+                    GithubOrgClient("Imaginary").public_repos("mit"),
                     ["Imaginary Project"]
             )
             m_method.use_count = m_method.call_count
